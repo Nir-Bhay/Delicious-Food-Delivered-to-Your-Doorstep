@@ -127,7 +127,7 @@ module.exports = app;
 app.use("/uploads", express.static("uploads"));
 
 // Define Mongoose Schema
-const userprofile = new mongoose.Schema({
+const userProfileSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     fullName: String,
     fatherName: String,
@@ -139,7 +139,7 @@ const userprofile = new mongoose.Schema({
     photo: String,
 });
 
-const Userprofiles = mongoose.model("Userdeshbord", userprofile);
+const UserProfile = mongoose.model("UserProfile", userProfileSchema);
 
 // Multer for file uploads
 const storage = multer.diskStorage({
@@ -153,7 +153,7 @@ const upload = multer({ storage });
 // API: Fetch User Profile
 app.get("/profile", authenticateToken, async (req, res) => {
     try {
-        const user = await Userprofiles.findOne({ userId: req.user.userId });
+        const user = await UserProfile.findOne({ userId: req.user.userId });
         if (!user) return res.status(404).json({ message: "User not found" });
 
         res.json(user);
@@ -168,7 +168,7 @@ app.post("/profile", authenticateToken, upload.single("photo"), async (req, res)
         const { fullName, fatherName, phone, email, address, mealType, startDate } = req.body;
         const photo = req.file ? `/uploads/${req.file.filename}` : null;
 
-        let user = await Userprofiles.findOne({ userId: req.user.userId });
+        let user = await UserProfile.findOne({ userId: req.user.userId });
         if (user) {
             user.fullName = fullName;
             user.fatherName = fatherName;
@@ -180,7 +180,7 @@ app.post("/profile", authenticateToken, upload.single("photo"), async (req, res)
             if (photo) user.photo = photo; // Only update if a new file is uploaded
             await user.save();
         } else {
-            user = new Userprofiles({ userId: req.user.userId, fullName, fatherName, phone, email, address, mealType, startDate, photo });
+            user = new UserProfile({ userId: req.user.userId, fullName, fatherName, phone, email, address, mealType, startDate, photo });
             await user.save();
         }
 
@@ -193,7 +193,7 @@ app.post("/profile", authenticateToken, upload.single("photo"), async (req, res)
 // API: Delete User Profile
 app.delete("/profile", authenticateToken, async (req, res) => {
     try {
-        const result = await Userprofiles.deleteOne({ userId: req.user.userId });
+        const result = await UserProfile.deleteOne({ userId: req.user.userId });
         if (result.deletedCount === 0) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -206,7 +206,7 @@ app.delete("/profile", authenticateToken, async (req, res) => {
 // Admin API: Fetch All User Profiles
 app.get("/admin/profiles", authenticateToken, isAdmin, async (req, res) => {
     try {
-        const users = await Userprofiles.find();
+        const users = await UserProfile.find();
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -219,7 +219,7 @@ app.put("/admin/profile/:id", authenticateToken, isAdmin, upload.single("photo")
         const { fullName, fatherName, phone, email, address, mealType, startDate } = req.body;
         const photo = req.file ? `/uploads/${req.file.filename}` : null;
 
-        let user = await Userprofiles.findById(req.params.id);
+        let user = await UserProfile.findById(req.params.id);
         if (user) {
             user.fullName = fullName;
             user.fatherName = fatherName;
@@ -242,7 +242,7 @@ app.put("/admin/profile/:id", authenticateToken, isAdmin, upload.single("photo")
 // Admin API: Delete Any User Profile
 app.delete("/admin/profile/:id", authenticateToken, isAdmin, async (req, res) => {
     try {
-        const result = await Userprofiles.deleteOne({ _id: req.params.id });
+        const result = await UserProfile.deleteOne({ _id: req.params.id });
         if (result.deletedCount === 0) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -252,7 +252,6 @@ app.delete("/admin/profile/:id", authenticateToken, isAdmin, async (req, res) =>
     }
 });
 
-// Admin API: Create New User
 // Admin API: Create New User
 app.post("/admin/create-user", authenticateToken, isAdmin, upload.none(), async (req, res) => {
     try {
@@ -271,7 +270,7 @@ app.post("/admin/create-user", authenticateToken, isAdmin, upload.none(), async 
         const newUser = new User({ name: fullName, email, password });
         await newUser.save();
 
-        const newUserProfile = new Userprofiles({
+        const newUserProfile = new UserProfile({
             userId: newUser._id,
             fullName,
             fatherName,
@@ -289,7 +288,6 @@ app.post("/admin/create-user", authenticateToken, isAdmin, upload.none(), async 
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 // Start Server
 const PORT = 5000;

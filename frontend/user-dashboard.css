@@ -16,10 +16,13 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h2 {
     text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5em;
 }
 
 .sidebar nav ul {
@@ -39,6 +42,7 @@ body {
     background: #34495e;
     border-radius: 5px;
     text-align: center;
+    transition: background 0.3s;
 }
 
 .sidebar nav ul li a:hover {
@@ -49,6 +53,7 @@ body {
 .main-content {
     flex-grow: 1;
     padding: 20px;
+    overflow-y: auto;
 }
 
 header {
@@ -57,10 +62,17 @@ header {
     padding: 15px;
     text-align: center;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 header h1 {
     margin: 0;
+    font-size: 2em;
+}
+
+header p {
+    margin: 5px 0 0;
+    font-size: 1em;
 }
 
 .content-section {
@@ -69,6 +81,14 @@ header h1 {
     margin-top: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content-section h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 /* Profile Section */
@@ -84,10 +104,11 @@ header h1 {
 
 .profileupdate form input,
 .profileupdate form select {
-    padding: 8px;
+    padding: 10px;
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1em;
 }
 
 .profileupdate button {
@@ -98,6 +119,8 @@ header h1 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s;
 }
 
 .profileupdate button:hover {
@@ -106,8 +129,89 @@ header h1 {
 
 button[type="button"] {
     background: #e74c3c;
+    margin-left: 10px;
 }
 
 button[type="button"]:hover {
     background: #c0392b;
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Payment Methods Section */
+.paymentinput {
+    display: flex;
+    flex-direction: column;
+}
+
+.paymentinput label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.paymentinput input {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.paymentinput button {
+    margin-top: 15px;
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s;
+}
+
+.paymentinput button:hover {
+    background: #2980b9;
+}
+
+/* Meal Menu Section */
+.meal-options ul {
+    list-style: none;
+    padding: 0;
+}
+
+.meal-options ul li {
+    background: #ecf0f1;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-size: 1em;
 }

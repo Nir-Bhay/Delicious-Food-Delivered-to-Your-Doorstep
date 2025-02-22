@@ -6,132 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="user-dashboard.css">
-    <script>
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById(sectionId).style.display = 'block';
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            fetchUserProfile();
-
-            document.getElementById("profileForm").addEventListener("submit", async (event) => {
-                event.preventDefault();
-                updateUserProfile();
-            });
-        });
-
-        async function fetchUserProfile() {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            try {
-                const response = await fetch("http://192.168.238.60:5000/profile", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": token
-                    },
-                });
-                const data = await response.json();
-
-                if (response.ok) {
-                    document.getElementById("name").innerText = data.fullName;
-                    document.getElementById("email").innerText = data.email;
-
-                    const inputs = document.querySelectorAll("#profileForm input, #profileForm select");
-                    inputs.forEach((input) => {
-                        if (data[input.name]) {
-                            input.value = data[input.name];
-                        }
-                    });
-                } else {
-                    console.error("Failed to fetch profile:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching profile:", error);
-            }
-        }
-
-        async function updateUserProfile() {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            const formData = new FormData(document.getElementById("profileForm"));
-
-            try {
-                const response = await fetch("http://192.168.238.60:5000/profile", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": token
-                    },
-                    body: formData,
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    alert("Profile updated successfully!");
-                    fetchUserProfile();
-                } else {
-                    alert("Error updating profile: " + result.message);
-                }
-            } catch (error) {
-                console.error("Error updating profile:", error);
-            }
-        }
-
-        async function deleteProfile() {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            if (!confirm("Are you sure you want to delete your profile?")) return;
-
-            try {
-                const response = await fetch("http://192.168.238.60:5000/profile", {
-                    method: "DELETE",
-                    headers: {
-                        "Authorization": token
-                    },
-                });
-
-                if (response.ok) {
-                    alert("Profile deleted successfully!");
-                    location.reload();
-                } else {
-                    alert("Error deleting profile");
-                }
-            } catch (error) {
-                console.error("Error deleting profile:", error);
-            }
-        }
-
-        // Get the token from localStorage
-        const token = localStorage.getItem("token");
-        if (!token) {
-            window.location.href = "login.html"; // If token is not found, redirect to login
-        }
-
-        // Decode the token to get the admin details (using JWT decode or any library)
-        const decoded = JSON.parse(atob(token.split('.')[1])); // Decode JWT token manually (for simplicity)
-        document.getElementById("adminName").innerText = decoded.name; // Admin's name
-        document.getElementById("adminEmail").innerText = decoded.email; // Admin's email
-
-        function logout() {
-            localStorage.removeItem("token"); // Remove token on logout
-            window.location.href = "login.html"; // Redirect to login page
-        }
-    </script>
+  
 </head>
 
 <body>
@@ -140,13 +15,14 @@
         <nav>
             <ul>
                 <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-                <li><a href="#" onclick="showSection('PaymentMethods')">PaymentMethods</a></li>
+                <li><a href="#" onclick="showSection('PaymentMethods')">Payment Methods</a></li>
                 <li><a href="#" onclick="showSection('mealMenu')">Meal Menu</a></li>
                 <li><a href="#" onclick="showSection('profile')">Profile</a></li>
                 <li><a onclick="logout()">Logout</a></li>
             </ul>
         </nav>
     </div>
+
     <div class="main-content">
         <header>
             <h1>Welcome, <span id="name"></span>!</h1>
@@ -154,11 +30,11 @@
         </header>
 
         <section id="dashboard" class="content-section">
-            <h2>overview of your current balance</h2>
+            <h2>Overview of your current balance</h2>
             <!-- Meal balance reflects after payment confirmation by Admin. -->
-            <!-- Balance reduces daily as meals are delivered. accroidng to use choode the plan of it  -->
+            <!-- Balance reduces daily as meals are delivered according to user chosen plan -->
             <div class="totalcurrentamount">
-                <h3></h3>
+                <h3>Your current balance is: $<span id="currentBalance"></span></h3>
             </div>
             <!-- ON/OFF Meal Option:
             Users can enable/disable meals daily but with a time limit.
@@ -167,38 +43,55 @@
             <!-- If balance is exhausted, status changes to “Balance Exhausted,” and meal delivery stops.
             Payment reminder message appears on the portal. -->
             <div class="onoff">
-                
+                <label for="mealStatus">Meal Status:</label>
+                <select id="mealStatus">
+                    <option value="on">On</option>
+                    <option value="off">Off</option>
+                    <option value="tna">Temporarily Not Available</option>
+                </select>
             </div>
             <div class="alert">
-                <p>low blance you have ot rechange <button>Pay Now</button>
-                </p>
+                <p>Low balance, you have to recharge <button>Pay Now</button></p>
             </div>
-
         </section>
 
         <section id="PaymentMethods" class="content-section" style="display:none;">
-            <h2>online payment </h2>
+            <h2>Online Payment</h2>
             <!-- Meal balance reflects after payment confirmation by Admin. -->
             <!-- Balance reduces daily as meals are delivered. -->
-           <div class="qrcode">
+            <div class="qrcode">
+                <img src="qrcode.png" alt="QR Code for Payment">
+            </div>
+            <!-- You have to pay yourself, admin confirms the payment using your UPI ID or name then it is added to your total balance -->
+            <div class="paymentinput">
+                <label for="paymentName">Name:</label>
+                <input type="text" id="paymentName" name="paymentName" required>
 
-           </div>
-           <!-- you have to pay yourself admin conform the payment uisng you upid or name then it was add on you total balace -->
-           <div class="pymentinput">
-            <div class="takename"></div>
-            <div class="takeamount"></div>
+                <label for="paymentAmount">Amount:</label>
+                <input type="number" id="paymentAmount" name="paymentAmount" required>
 
-            <div class="takeupid"></div>
-            <div class="taketransionid"></div>
-            <div class="submit"></div>
-           </div>
+                <label for="upiId">UPI ID:</label>
+                <input type="text" id="upiId" name="upiId" required>
 
+                <label for="transactionId">Transaction ID:</label>
+                <input type="text" id="transactionId" name="transactionId" required>
+
+                <button type="submit" onclick="submitPayment()">Submit Payment</button>
+            </div>
         </section>
-
 
         <section id="mealMenu" class="content-section" style="display:none;">
             <h2>Meal Menu</h2>
-            <p>what use selection the meal or paln accroidng to it we have to show the meal meanu herere acconding to ure coose </p>
+            <p>What user selects the meal or plan according to it we have to show the meal menu here according to your choice</p>
+            <div class="meal-options">
+                <h3>Available Meals:</h3>
+                <ul>
+                    <li>Premium Meal</li>
+                    <li>Executive Meal</li>
+                    <li>Half Executive Meal</li>
+                    <li>Regular Meal</li>
+                </ul>
+            </div>
         </section>
 
         <section id="profile" class="content-section" style="display:none;">
@@ -207,45 +100,59 @@
             <p id="name"></p>
             <label>Email:</label>
             <p id="email"></p>
+            <label>Drop Address:</label>
+            <p id="dropAddress"></p>
+            <label>Required Meal:</label>
+            <p id="requiredMeal"></p>
+            <label>Start From (Date):</label>
+            <p id="startDate"></p>
+            <label>Monthly subscription:</label>
+            <p id="monthlySubscription"></p>
 
-            <div class="profileupdate">
-                <h2>Update Profile</h2>
-                <form id="profileForm">
-                    <label>Customer Name:</label>
-                    <input type="text" name="fullName" placeholder="Customer Name:" required>
+            <button id="updateProfileButton">Update Profile</button>
 
-                    <label>Father's Name:</label>
-                    <input type="text" name="fatherName" placeholder="Father's Name" required>
+            <div id="profilePopup" class="popup" style="display:none;">
+                <div class="popup-content">
+                    <span id="closePopup" class="close">&times;</span>
+                    <h2>Update Profile</h2>
+                    <form id="profileForm">
+                        <label>Customer Name:</label>
+                        <input type="text" name="fullName" placeholder="Customer Name:" required>
 
-                    <label>10 Digit Registered Mobile Number:</label>
-                    <input type="tel" name="phone" required>
+                        <label>Father's Name:</label>
+                        <input type="text" name="fatherName" placeholder="Father's Name" required>
 
-                    <label>Email Address:</label>
-                    <input type="email" name="email" required>
+                        <label>10 Digit Registered Mobile Number:</label>
+                        <input type="tel" name="phone" required>
 
-                    <label>Drop Address:</label>
-                    <input type="text" name="address" required>
+                        <label>Email Address:</label>
+                        <input type="email" name="email" required>
 
-                    <label>Upload Photo/Aadhar Card:</label>
-                    <input type="file" name="photo">
+                        <label>Drop Address:</label>
+                        <input type="text" name="address" required>
 
-                    <label>Required Meal:</label>
-                    <select name="mealType">
-                        <option>Premium</option>
-                        <option>Executive</option>
-                        <option>Half Executive</option>
-                        <option>Regular</option>
-                    </select>
+                        <label>Upload Photo/Aadhar Card:</label>
+                        <input type="file" name="photo">
 
-                    <label>Start From (Date):</label>
-                    <input type="date" name="startDate" required>
+                        <label>Required Meal:</label>
+                        <select name="mealType">
+                            <option>Premium</option>
+                            <option>Executive</option>
+                            <option>Half Executive</option>
+                            <option>Regular</option>
+                        </select>
 
-                    <button type="submit">Update Profile</button>
-                    <button type="button" onclick="deleteProfile()">Delete Profile</button>
-                </form>
+                        <label>Start From (Date):</label>
+                        <input type="date" name="startDate" required>
+
+                        <button type="submit">Update Profile</button>
+                        <button type="button" onclick="deleteProfile()">Delete Profile</button>
+                    </form>
+                </div>
             </div>
         </section>
     </div>
+    <script src="user-dashboard.js"></script>
 </body>
 
 </html>
