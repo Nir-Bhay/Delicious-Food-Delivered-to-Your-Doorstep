@@ -5,318 +5,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* General Styling */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            background-color: #f4f4f4;
-        }
-
-        header {
-            background-color: #ff6347;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-
-        header h1 {
-            font-size: 28px;
-        }
-
-        .lang-switch {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .lang-switch button {
-            background-color: #ff6347;
-            color: white;
-            padding: 5px 15px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 5px;
-        }
-
-        /* Sidebar Navigation */
-        .sidebar {
-            background-color: #ff6347;
-            color: white;
-            width: 250px;
-            height: 100vh;
-            position: fixed;
-            padding: 20px;
-            top: 0;
-            left: 0;
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar nav ul li {
-            margin: 20px 0;
-        }
-
-        .sidebar nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            display: block;
-        }
-
-        .sidebar nav ul li a:hover {
-            background-color: #ff4500;
-            padding: 10px;
-            border-radius: 6px;
-        }
-
-        /* Main Content Area */
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            flex-grow: 1;
-        }
-
-        .meal-menu,
-        .customer-status,
-        .payment,
-        .notifications {
-            margin-bottom: 40px;
-        }
-
-        .menu-item,
-        .customer-status-box,
-        .payment-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .menu-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .customer-status-box,
-        .payment-box {
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .status-box,
-        .payment-option {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 30%;
-        }
-
-        .status-box.active {
-            background-color: #4CAF50;
-        }
-
-        .status-box.meal-off {
-            background-color: #f39c12;
-        }
-
-        .status-box.tna {
-            background-color: #e67e22;
-        }
-
-        .status-box.exhausted {
-            background-color: #f44336;
-        }
-
-        .status-box.discontinued {
-            background-color: #7f8c8d;
-        }
-
-        .payment-option button {
-            background-color: #ff6347;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .payment-option button:hover {
-            background-color: #ff4500;
-        }
-
-        /* Notifications */
-        .notifications ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .notifications ul li {
-            background-color: #ff6347;
-            color: white;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-            }
-
-            .sidebar {
-                width: 100%;
-                position: relative;
-            }
-
-            .menu-item,
-            .status-box,
-            .payment-option {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-
-            .customer-status-box,
-            .payment-box {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>User Dashboard</h2>
-        <nav>
-            <ul>
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Meal Menu</a></li>
-                <li><a href="#">Orders</a></li>
-                <li><a href="#">Payments</a></li>
-                <li><a href="#">Notifications</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="javascript:void(0);" onclick="logout()">Logout</a></li>
-            </ul>
-        </nav>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Header -->
-        <header>
-            <h1>Welcome, <span id="adminName"></span>!</h1>
-            <p id="adminEmail"></p>
-            <div class="lang-switch">
-                <button>English</button>
-                <button>Hindi</button>
-            </div>
-        </header>
-
-        <!-- Meal Menu Section -->
-        <div class="meal-menu">
-            <h2>Available Meal Menus</h2>
-            <div class="menu-item">
-                <img src="meal1.jpg" alt="Meal 1">
-                <h3>Meal 1</h3>
-                <p>Delicious and healthy meal</p>
-                <button>Order Now</button>
-            </div>
-            <div class="menu-item">
-                <img src="meal2.jpg" alt="Meal 2">
-                <h3>Meal 2</h3>
-                <p>Fresh and nutritious meal</p>
-                <button>Order Now</button>
-            </div>
-            <div class="menu-item">
-                <img src="meal3.jpg" alt="Meal 3">
-                <h3>Meal 3</h3>
-                <p>Perfect for a balanced diet</p>
-                <button>Order Now</button>
-            </div>
-        </div>
-
-        <!-- Customer Status Section -->
-        <div class="customer-status">
-            <h2>Customer Status</h2>
-            <div class="customer-status-box">
-                <div class="status-box active">
-                    <h3>Active</h3>
-                    <p>Customers with ongoing service</p>
-                </div>
-                <div class="status-box meal-off">
-                    <h3>Meal Off</h3>
-                    <p>Temporary meal off (<3 Days)</p>
-                </div>
-                <div class="status-box tna">
-                    <h3>TNA</h3>
-                    <p>Long-term non-active customers (>3 Days)</p>
-                </div>
-                <div class="status-box exhausted">
-                    <h3>Exhausted</h3>
-                    <p>No meal balance left</p>
-                </div>
-                <div class="status-box discontinued">
-                    <h3>Discontinued</h3>
-                    <p>Permanently stopped customers</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Payment Section -->
-        <div class="payment">
-            <h2>Payment Options</h2>
-            <div class="payment-box">
-                <div class="payment-option">
-                    <h3>Online Payment</h3>
-                    <button>Pay Now</button>
-                </div>
-                <div class="payment-option">
-                    <h3>Cash Payment</h3>
-                    <button>Pay Now</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notifications Section -->
-        <div class="notifications">
-            <h2>Notifications</h2>
-            <ul>
-                <li>Meal balance low, recharge reminder.</li>
-                <li>Payment confirmed, meal balance updated.</li>
-                <li>Your subscription is about to expire.</li>
-            </ul>
-        </div>
-    </div>
-
-   
+    <link rel="stylesheet" href="user-dashboard.css">
     <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchUserProfile();
+
+            document.getElementById("profileForm").addEventListener("submit", async (event) => {
+                event.preventDefault();
+                updateUserProfile();
+            });
+        });
+
+        async function fetchUserProfile() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.href = "login.html"; // If token is not found, redirect to login
+                return;
+            }
+
+            try {
+                const response = await fetch("http://192.168.238.60:5000/profile", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": token
+                    },
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById("name").innerText = data.fullName;
+                    document.getElementById("email").innerText = data.email;
+
+                    const inputs = document.querySelectorAll("#profileForm input, #profileForm select");
+                    inputs.forEach((input) => {
+                        if (data[input.name]) {
+                            input.value = data[input.name];
+                        }
+                    });
+                } else {
+                    console.error("Failed to fetch profile:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        }
+
+        async function updateUserProfile() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.href = "login.html"; // If token is not found, redirect to login
+                return;
+            }
+
+            const formData = new FormData(document.getElementById("profileForm"));
+
+            try {
+                const response = await fetch("http://192.168.238.60:5000/profile", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": token
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert("Profile updated successfully!");
+                    fetchUserProfile();
+                } else {
+                    alert("Error updating profile: " + result.message);
+                }
+            } catch (error) {
+                console.error("Error updating profile:", error);
+            }
+        }
+
+        async function deleteProfile() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                window.location.href = "login.html"; // If token is not found, redirect to login
+                return;
+            }
+
+            if (!confirm("Are you sure you want to delete your profile?")) return;
+
+            try {
+                const response = await fetch("http://192.168.238.60:5000/profile", {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": token
+                    },
+                });
+
+                if (response.ok) {
+                    alert("Profile deleted successfully!");
+                    location.reload();
+                } else {
+                    alert("Error deleting profile");
+                }
+            } catch (error) {
+                console.error("Error deleting profile:", error);
+            }
+        }
+
         // Get the token from localStorage
         const token = localStorage.getItem("token");
         if (!token) {
@@ -333,6 +132,120 @@
             window.location.href = "login.html"; // Redirect to login page
         }
     </script>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>User Dashboard</h2>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('PaymentMethods')">PaymentMethods</a></li>
+                <li><a href="#" onclick="showSection('mealMenu')">Meal Menu</a></li>
+                <li><a href="#" onclick="showSection('profile')">Profile</a></li>
+                <li><a onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="main-content">
+        <header>
+            <h1>Welcome, <span id="name"></span>!</h1>
+            <p id="email"></p>
+        </header>
+
+        <section id="dashboard" class="content-section">
+            <h2>overview of your current balance</h2>
+            <!-- Meal balance reflects after payment confirmation by Admin. -->
+            <!-- Balance reduces daily as meals are delivered. accroidng to use choode the plan of it  -->
+            <div class="totalcurrentamount">
+                <h3></h3>
+            </div>
+            <!-- ON/OFF Meal Option:
+            Users can enable/disable meals daily but with a time limit.
+            If disabled for less than 3 days, status = "Meal Off."
+            If disabled for more than 3 days, status = "TNA" (Temporarily Not Available). -->
+            <!-- If balance is exhausted, status changes to “Balance Exhausted,” and meal delivery stops.
+            Payment reminder message appears on the portal. -->
+            <div class="onoff">
+                
+            </div>
+            <div class="alert">
+                <p>low blance you have ot rechange <button>Pay Now</button>
+                </p>
+            </div>
+
+        </section>
+
+        <section id="PaymentMethods" class="content-section" style="display:none;">
+            <h2>online payment </h2>
+            <!-- Meal balance reflects after payment confirmation by Admin. -->
+            <!-- Balance reduces daily as meals are delivered. -->
+           <div class="qrcode">
+
+           </div>
+           <!-- you have to pay yourself admin conform the payment uisng you upid or name then it was add on you total balace -->
+           <div class="pymentinput">
+            <div class="takename"></div>
+            <div class="takeamount"></div>
+
+            <div class="takeupid"></div>
+            <div class="taketransionid"></div>
+            <div class="submit"></div>
+           </div>
+
+        </section>
+
+
+        <section id="mealMenu" class="content-section" style="display:none;">
+            <h2>Meal Menu</h2>
+            <p>what use selection the meal or paln accroidng to it we have to show the meal meanu herere acconding to ure coose </p>
+        </section>
+
+        <section id="profile" class="content-section" style="display:none;">
+            <h2>Profile Data</h2>
+            <label>Name:</label>
+            <p id="name"></p>
+            <label>Email:</label>
+            <p id="email"></p>
+
+            <div class="profileupdate">
+                <h2>Update Profile</h2>
+                <form id="profileForm">
+                    <label>Customer Name:</label>
+                    <input type="text" name="fullName" placeholder="Customer Name:" required>
+
+                    <label>Father's Name:</label>
+                    <input type="text" name="fatherName" placeholder="Father's Name" required>
+
+                    <label>10 Digit Registered Mobile Number:</label>
+                    <input type="tel" name="phone" required>
+
+                    <label>Email Address:</label>
+                    <input type="email" name="email" required>
+
+                    <label>Drop Address:</label>
+                    <input type="text" name="address" required>
+
+                    <label>Upload Photo/Aadhar Card:</label>
+                    <input type="file" name="photo">
+
+                    <label>Required Meal:</label>
+                    <select name="mealType">
+                        <option>Premium</option>
+                        <option>Executive</option>
+                        <option>Half Executive</option>
+                        <option>Regular</option>
+                    </select>
+
+                    <label>Start From (Date):</label>
+                    <input type="date" name="startDate" required>
+
+                    <button type="submit">Update Profile</button>
+                    <button type="button" onclick="deleteProfile()">Delete Profile</button>
+                </form>
+            </div>
+        </section>
+    </div>
 </body>
 
 </html>
