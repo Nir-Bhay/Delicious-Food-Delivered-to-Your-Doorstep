@@ -30,7 +30,7 @@ async function fetchUserProfile() {
     }
 
     try {
-        const response = await fetch("http://192.168.238.60:5000/profile", {
+        const response = await fetch("https://my-backend-cedd.onrender.com/profile", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -71,7 +71,7 @@ async function updateUserProfile() {
     const formData = new FormData(document.getElementById("profileForm"));
 
     try {
-        const response = await fetch("http://192.168.238.60:5000/profile", {
+        const response = await fetch("https://my-backend-cedd.onrender.com/profile", {
             method: "POST",
             headers: {
                 "Authorization": token
@@ -102,7 +102,7 @@ async function deleteProfile() {
     if (!confirm("Are you sure you want to delete your profile?")) return;
 
     try {
-        const response = await fetch("http://192.168.238.60:5000/profile", {
+        const response = await fetch("https://my-backend-cedd.onrender.com/profile", {
             method: "DELETE",
             headers: {
                 "Authorization": token

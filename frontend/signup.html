@@ -167,7 +167,7 @@
             const password = document.getElementById("password").value;
 
             try {
-                const response = await fetch("http://192.168.238.60:5000/signup", {  // Use your machine's IP
+                const response = await fetch("https://my-backend-cedd.onrender.com/signup", {  // Use your machine's IP
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

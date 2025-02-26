@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // CORS Configuration
 const corsOptions = {
-    origin: ["http://192.168.238.60:5500", "http://localhost:5500"], // Allow frontend access
+    origin: ["https://my-backend-cedd.onrender.com", "http://localhost:5500"], // Allow frontend access
     methods: "GET,POST,PUT,DELETE",
     credentials: true
 };
