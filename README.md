@@ -32,10 +32,77 @@ This project features a modern, responsive UI powered by **React.js** and a secu
 
 | Frontend                     | Backend                      | Database     | Others                  |
 |------------------------------|------------------------------|--------------|-------------------------|
-| React.js                     | Node.js                     | MongoDB      | JWT Authentication      |
+|                   | Node.js                     | MongoDB      | JWT Authentication      |
 | CSS3, HTML5, JavaScript (ES6+) | Express.js                  | Mongoose     | Multer (file uploads)   |
 | Vercel (Deployment)          | Render (Backend Hosting)     |              | dotenv (env config)     |
 
 ---
 
 ## 📁 Project Structure
+
+Delicious-Food-Delivered-to-Your-Doorstep/
+│
+├── backend/ # Express API server
+│ ├── models/ # Mongoose schemas
+│ ├── routes/ # API routes for auth, foods, orders, users
+│ ├── middleware/ # Auth & other middleware
+│ ├── app.js # Main backend setup
+│ └── .env # Environment variables (not committed)
+│
+├── frontend/ # React client app
+│ ├── src/
+│ ├── public/
+│ ├── package.json
+│ └── .env # Frontend env configs
+│
+└── README.md
+
+
+
+---
+
+## ⬇️ Installation and Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Nir-Bhay/Delicious-Food-Delivered-to-Your-Doorstep.git
+cd Delicious-Food-Delivered-to-Your-Doorstep
+
+## ⬇️ Installation and Setup
+
+### 1. Backend Setup
+
+```bash
+cd backend
+npm install
+
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+PORT=5000
+
+cd ../frontend
+npm install
+npm start
+
+
+How to Use
+Visit the app and sign up or log in.
+Users can browse menus, add food items to the cart, and place orders.
+Track your order status in real-time.
+Admins log in to access the admin dashboard for managing inventory, orders, and users.
+Admins can upload images for food items via the dashboard.
+
+
+🤝 Contribution
+Contributions are highly welcomed!
+Feel free to fork the repository, create a feature branch, and submit pull requests.
+For major changes, please open an issue to discuss beforehand.
+
+🔖 Tags
+#ReactJS #ExpressJS #NodeJS #MongoDB #Multer #JWT #FullStack #FoodDelivery #WebApp #Vercel #Render
+
+
+---
+
+
