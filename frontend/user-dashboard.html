@@ -4,154 +4,568 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>User Dashboard - Meal Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="user-dashboard.css">
-  
 </head>
 
 <body>
-    <div class="sidebar">
-        <h2>User Dashboard</h2>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-user-circle"></i>
+            <h2>My Dashboard</h2>
+        </div>
         <nav>
             <ul>
-                <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-                <li><a href="#" onclick="showSection('PaymentMethods')">Payment Methods</a></li>
-                <li><a href="#" onclick="showSection('mealMenu')">Meal Menu</a></li>
-                <li><a href="#" onclick="showSection('profile')">Profile</a></li>
-                <li><a onclick="logout()">Logout</a></li>
+                <li><a href="#" onclick="showSection('dashboard')" class="nav-link active"><i class="fas fa-home"></i>
+                        Dashboard</a></li>
+                <li><a href="#" onclick="showSection('mealStatus')" class="nav-link"><i class="fas fa-toggle-on"></i>
+                        Meal Status</a></li>
+                <li><a href="#" onclick="showSection('payments')" class="nav-link"><i class="fas fa-credit-card"></i>
+                        Payments</a></li>
+                <li><a href="#" onclick="showSection('mealMenu')" class="nav-link"><i class="fas fa-utensils"></i> Meal
+                        Plans</a></li>
+                <li><a href="#" onclick="showSection('history')" class="nav-link"><i class="fas fa-history"></i>
+                        History</a></li>
+                <li><a href="#" onclick="showSection('profile')" class="nav-link"><i class="fas fa-user"></i>
+                        Profile</a></li>
+                <li><a href="#" onclick="logout()" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </nav>
     </div>
 
+    <!-- Main Content -->
     <div class="main-content">
-        <header>
-            <h1>Welcome, <span id="name"></span>!</h1>
-            <p id="email"></p>
-        </header>
+        <!-- Top Bar -->
+        <div class="topbar">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="user-info">
+                <span class="welcome-text">Welcome back,</span>
+                <span class="user-name" id="userName">Loading...</span>
+            </div>
+        </div>
 
-        <section id="dashboard" class="content-section">
-            <h2>Overview of your current balance</h2>
-            <!-- Meal balance reflects after payment confirmation by Admin. -->
-            <!-- Balance reduces daily as meals are delivered according to user chosen plan -->
-            <div class="totalcurrentamount">
-                <h3>Your current balance is: $<span id="currentBalance"></span></h3>
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="section-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                <span class="current-date" id="currentDate"></span>
             </div>
-            <!-- ON/OFF Meal Option:
-            Users can enable/disable meals daily but with a time limit.
-            If disabled for less than 3 days, status = "Meal Off."
-            If disabled for more than 3 days, status = "TNA" (Temporarily Not Available). -->
-            <!-- If balance is exhausted, status changes to “Balance Exhausted,” and meal delivery stops.
-            Payment reminder message appears on the portal. -->
-            <div class="onoff">
-                <label for="mealStatus">Meal Status:</label>
-                <select id="mealStatus">
-                    <option value="on">On</option>
-                    <option value="off">Off</option>
-                    <option value="tna">Temporarily Not Available</option>
-                </select>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--primary-color);">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Current Balance</h3>
+                        <p class="stat-number">₹<span id="currentBalance">0</span></p>
+                        <span class="stat-info">Available for <span id="daysRemaining">0</span> days</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--success-color);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Meal Status</h3>
+                        <p class="stat-number" id="mealStatusDisplay">Active</p>
+                        <span class="stat-info">Today's meal confirmed</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--warning-color);">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Meal Plan</h3>
+                        <p class="stat-number" id="currentMealPlan">Premium</p>
+                        <span class="stat-info">₹<span id="dailyCost">150</span>/day</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--secondary-color);">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>This Month</h3>
+                        <p class="stat-number"><span id="mealsThisMonth">0</span> Meals</p>
+                        <span class="stat-info">Delivered successfully</span>
+                    </div>
+                </div>
             </div>
-            <div class="alert">
-                <p>Low balance, you have to recharge <button>Pay Now</button></p>
+
+            <!-- Balance Alert -->
+            <div id="balanceAlert" class="alert-box warning" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="alert-content">
+                    <h4>Low Balance Alert</h4>
+                    <p>Your balance is running low. Only <span id="alertDays">0</span> days remaining.</p>
+                </div>
+                <button class="btn btn-primary" onclick="showSection('payments')">
+                    <i class="fas fa-credit-card"></i> Recharge Now
+                </button>
+            </div>
+
+            <!-- Today's Meal -->
+            <div class="today-meal-card">
+                <h3><i class="fas fa-sun"></i> Today's Meal</h3>
+                <div class="meal-status-indicator">
+                    <span class="status-badge active">Confirmed</span>
+                    <span class="delivery-time"><i class="fas fa-clock"></i> Delivery: 12:30 PM - 1:00 PM</span>
+                </div>
+                <div class="meal-details" id="todayMealDetails">
+                    <!-- Dynamic content -->
+                </div>
             </div>
         </section>
 
-        <section id="PaymentMethods" class="content-section" style="display:none;">
-            <h2>Online Payment</h2>
-            <!-- Meal balance reflects after payment confirmation by Admin. -->
-            <!-- Balance reduces daily as meals are delivered. -->
-            <div class="qrcode">
-                <img src="qrcode.png" alt="QR Code for Payment">
+        <!-- Meal Status Section -->
+        <section id="mealStatus" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-toggle-on"></i> Meal Status Management</h2>
             </div>
-            <!-- You have to pay yourself, admin confirms the payment using your UPI ID or name then it is added to your total balance -->
-            <div class="paymentinput">
-                <label for="paymentName">Name:</label>
-                <input type="text" id="paymentName" name="paymentName" required>
 
-                <label for="paymentAmount">Amount:</label>
-                <input type="number" id="paymentAmount" name="paymentAmount" required>
+            <div class="meal-control-card">
+                <h3>Quick Meal Control</h3>
+                <div class="meal-toggle">
+                    <label class="switch-label">
+                        <span>Meal Status</span>
+                        <label class="switch">
+                            <input type="checkbox" id="mealToggle" checked onchange="toggleMealStatus()">
+                            <span class="slider"></span>
+                        </label>
+                        <span id="toggleStatus">ON</span>
+                    </label>
+                </div>
 
-                <label for="upiId">UPI ID:</label>
-                <input type="text" id="upiId" name="upiId" required>
+                <div class="meal-off-options" id="mealOffOptions" style="display: none;">
+                    <h4>How long do you want to turn off meals?</h4>
+                    <div class="option-grid">
+                        <button class="option-btn" onclick="setMealOff(1)">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>1 Day</span>
+                        </button>
+                        <button class="option-btn" onclick="setMealOff(2)">
+                            <i class="fas fa-calendar-week"></i>
+                            <span>2 Days</span>
+                        </button>
+                        <button class="option-btn" onclick="setMealOff(3)">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>3 Days</span>
+                        </button>
+                        <button class="option-btn" onclick="showCustomDatePicker()">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>Custom</span>
+                        </button>
+                    </div>
+                </div>
 
-                <label for="transactionId">Transaction ID:</label>
-                <input type="text" id="transactionId" name="transactionId" required>
+                <div class="status-info">
+                    <div class="info-item">
+                        <i class="fas fa-info-circle"></i>
+                        <p><strong>Meal Off (1-3 days):</strong> Temporary pause, balance won't be deducted</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p><strong>TNA (>3 days):</strong> Extended pause, requires reactivation</p>
+                    </div>
+                </div>
+            </div>
 
-                <button type="submit" onclick="submitPayment()">Submit Payment</button>
+            <!-- Meal Calendar -->
+            <div class="meal-calendar-card">
+                <h3><i class="fas fa-calendar"></i> Meal Calendar</h3>
+                <div id="mealCalendar" class="calendar-grid">
+                    <!-- Dynamic calendar -->
+                </div>
             </div>
         </section>
 
-        <section id="mealMenu" class="content-section" style="display:none;">
-            <h2>Meal Menu</h2>
-            <p>What user selects the meal or plan according to it we have to show the meal menu here according to your choice</p>
-            <div class="meal-options">
-                <h3>Available Meals:</h3>
-                <ul>
-                    <li>Premium Meal</li>
-                    <li>Executive Meal</li>
-                    <li>Half Executive Meal</li>
-                    <li>Regular Meal</li>
-                </ul>
+        <!-- Payments Section -->
+        <section id="payments" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-credit-card"></i> Payment & Recharge</h2>
             </div>
-        </section>
 
-        <section id="profile" class="content-section" style="display:none;">
-            <h2>Profile Data</h2>
-            <label>Name:</label>
-            <p id="name"></p>
-            <label>Email:</label>
-            <p id="email"></p>
-            <label>Drop Address:</label>
-            <p id="dropAddress"></p>
-            <label>Required Meal:</label>
-            <p id="requiredMeal"></p>
-            <label>Start From (Date):</label>
-            <p id="startDate"></p>
-            <label>Monthly subscription:</label>
-            <p id="monthlySubscription"></p>
+            <div class="payment-container">
+                <div class="payment-card">
+                    <h3>Quick Recharge</h3>
+                    <div class="recharge-options">
+                        <button class="recharge-btn" onclick="selectRecharge(500)">
+                            <span class="amount">₹500</span>
+                            <span class="validity">~3 days</span>
+                        </button>
+                        <button class="recharge-btn popular" onclick="selectRecharge(1000)">
+                            <span class="badge">Popular</span>
+                            <span class="amount">₹1000</span>
+                            <span class="validity">~6 days</span>
+                        </button>
+                        <button class="recharge-btn" onclick="selectRecharge(2000)">
+                            <span class="amount">₹2000</span>
+                            <span class="validity">~13 days</span>
+                        </button>
+                        <button class="recharge-btn" onclick="selectRecharge(3000)">
+                            <span class="amount">₹3000</span>
+                            <span class="validity">~20 days</span>
+                        </button>
+                    </div>
 
-            <button id="updateProfileButton">Update Profile</button>
+                    <div class="custom-amount">
+                        <label>Or enter custom amount:</label>
+                        <input type="number" id="customAmount" placeholder="Enter amount" min="100">
+                    </div>
+                </div>
 
-            <div id="profilePopup" class="popup" style="display:none;">
-                <div class="popup-content">
-                    <span id="closePopup" class="close">&times;</span>
-                    <h2>Update Profile</h2>
-                    <form id="profileForm">
-                        <label>Customer Name:</label>
-                        <input type="text" name="fullName" placeholder="Customer Name:" required>
+                <div class="payment-method-card">
+                    <h3>Payment Method</h3>
+                    <div class="qr-section">
+                        <img src="qrcode.png" alt="QR Code for Payment" class="qr-code">
+                        <p>Scan QR code to pay via UPI</p>
+                    </div>
 
-                        <label>Father's Name:</label>
-                        <input type="text" name="fatherName" placeholder="Father's Name" required>
+                    <div class="divider">OR</div>
 
-                        <label>10 Digit Registered Mobile Number:</label>
-                        <input type="tel" name="phone" required>
+                    <form id="paymentForm" class="payment-form">
+                        <div class="form-group">
+                            <label>Transaction Details</label>
+                            <input type="text" id="paymentName" placeholder="Your Name" required>
+                        </div>
 
-                        <label>Email Address:</label>
-                        <input type="email" name="email" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="number" id="paymentAmount" placeholder="Amount" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="upiId" placeholder="UPI ID" required>
+                            </div>
+                        </div>
 
-                        <label>Drop Address:</label>
-                        <input type="text" name="address" required>
+                        <div class="form-group">
+                            <input type="text" id="transactionId" placeholder="Transaction ID" required>
+                        </div>
 
-                        <label>Upload Photo/Aadhar Card:</label>
-                        <input type="file" name="photo">
-
-                        <label>Required Meal:</label>
-                        <select name="mealType">
-                            <option>Premium</option>
-                            <option>Executive</option>
-                            <option>Half Executive</option>
-                            <option>Regular</option>
-                        </select>
-
-                        <label>Start From (Date):</label>
-                        <input type="date" name="startDate" required>
-
-                        <button type="submit">Update Profile</button>
-                        <button type="button" onclick="deleteProfile()">Delete Profile</button>
+                        <button type="submit" class="btn btn-primary full-width">
+                            <i class="fas fa-paper-plane"></i> Submit Payment
+                        </button>
                     </form>
+                </div>
+            </div>
+
+            <!-- Payment History -->
+            <div class="payment-history-card">
+                <h3><i class="fas fa-history"></i> Recent Transactions</h3>
+                <div class="transaction-list" id="transactionList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Meal Menu Section -->
+        <section id="mealMenu" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-utensils"></i> Meal Plans</h2>
+            </div>
+
+            <div class="meal-plans-grid">
+                <div class="meal-plan-card premium">
+                    <div class="plan-header">
+                        <h3>Premium</h3>
+                        <span class="price">₹150/day</span>
+                    </div>
+                    <div class="plan-body">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 4 Chapati</li>
+                            <li><i class="fas fa-check"></i> Rice (Unlimited)</li>
+                            <li><i class="fas fa-check"></i> Dal</li>
+                            <li><i class="fas fa-check"></i> 2 Vegetables</li>
+                            <li><i class="fas fa-check"></i> Salad</li>
+                            <li><i class="fas fa-check"></i> Sweet Dish</li>
+                            <li><i class="fas fa-check"></i> Pickle & Papad</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="changeMealPlan('Premium')">
+                            Select Plan
+                        </button>
+                    </div>
+                </div>
+
+                <div class="meal-plan-card executive current">
+                    <div class="current-badge">Current Plan</div>
+                    <div class="plan-header">
+                        <h3>Executive</h3>
+                        <span class="price">₹120/day</span>
+                    </div>
+                    <div class="plan-body">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 3 Chapati</li>
+                            <li><i class="fas fa-check"></i> Rice</li>
+                            <li><i class="fas fa-check"></i> Dal</li>
+                            <li><i class="fas fa-check"></i> 1 Vegetable</li>
+                            <li><i class="fas fa-check"></i> Salad</li>
+                            <li><i class="fas fa-check"></i> Pickle</li>
+                        </ul>
+                        <button class="btn btn-secondary" disabled>
+                            Current Plan
+                        </button>
+                    </div>
+                </div>
+
+                <div class="meal-plan-card half-executive">
+                    <div class="plan-header">
+                        <h3>Half Executive</h3>
+                        <span class="price">₹80/day</span>
+                    </div>
+                    <div class="plan-body">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 2 Chapati</li>
+                            <li><i class="fas fa-check"></i> Rice</li>
+                            <li><i class="fas fa-check"></i> Dal</li>
+                            <li><i class="fas fa-check"></i> 1 Vegetable</li>
+                            <li><i class="fas fa-check"></i> Pickle</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="changeMealPlan('Half Executive')">
+                            Select Plan
+                        </button>
+                    </div>
+                </div>
+
+                <div class="meal-plan-card regular">
+                    <div class="plan-header">
+                        <h3>Regular</h3>
+                        <span class="price">₹60/day</span>
+                    </div>
+                    <div class="plan-body">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 2 Chapati</li>
+                            <li><i class="fas fa-check"></i> Rice (Limited)</li>
+                            <li><i class="fas fa-check"></i> Dal</li>
+                            <li><i class="fas fa-check"></i> 1 Vegetable</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="changeMealPlan('Regular')">
+                            Select Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Menu -->
+            <div class="weekly-menu-card">
+                <h3><i class="fas fa-calendar-week"></i> This Week's Menu</h3>
+                <div class="menu-tabs">
+                    <button class="tab-btn active" onclick="showMenuDay('monday')">Mon</button>
+                    <button class="tab-btn" onclick="showMenuDay('tuesday')">Tue</button>
+                    <button class="tab-btn" onclick="showMenuDay('wednesday')">Wed</button>
+                    <button class="tab-btn" onclick="showMenuDay('thursday')">Thu</button>
+                    <button class="tab-btn" onclick="showMenuDay('friday')">Fri</button>
+                    <button class="tab-btn" onclick="showMenuDay('saturday')">Sat</button>
+                    <button class="tab-btn" onclick="showMenuDay('sunday')">Sun</button>
+                </div>
+                <div id="menuContent" class="menu-content">
+                    <!-- Dynamic menu content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-history"></i> History</h2>
+                <div class="header-actions">
+                    <select class="filter-select" onchange="filterHistory(this.value)">
+                        <option value="all">All History</option>
+                        <option value="meals">Meals</option>
+                        <option value="payments">Payments</option>
+                        <option value="status">Status Changes</option>
+                    </select>
+                    <button class="btn btn-secondary" onclick="exportHistory()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <div class="history-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker success"></div>
+                    <div class="timeline-content">
+                        <h4>Payment Received</h4>
+                        <p>₹1000 added to your balance</p>
+                        <span class="timeline-date">Today, 10:30 AM</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker primary"></div>
+                    <div class="timeline-content">
+                        <h4>Meal Delivered</h4>
+                        <p>Executive meal delivered successfully</p>
+                        <span class="timeline-date">Today, 12:45 PM</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker warning"></div>
+                    <div class="timeline-content">
+                        <h4>Meal Status Changed</h4>
+                        <p>Meal turned OFF for tomorrow</p>
+                        <span class="timeline-date">Yesterday, 8:00 PM</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-user"></i> My Profile</h2>
+                <button class="btn btn-primary" onclick="showEditProfile()">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+
+            <div class="profile-container">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profileName">Loading...</h3>
+                            <p id="profileEmail">Loading...</p>
+                            <span class="member-badge">Member since <span id="memberSince">2024</span></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="detail-group">
+                            <label>Phone Number</label>
+                            <p id="profilePhone">Loading...</p>
+                        </div>
+
+                        <div class="detail-group">
+                            <label>Delivery Address</label>
+                            <p id="profileAddress">Loading...</p>
+                        </div>
+
+                        <div class="detail-group">
+                            <label>Current Meal Plan</label>
+                            <p id="profileMealPlan">Loading...</p>
+                        </div>
+
+                        <div class="detail-group">
+                            <label>Subscription Started</label>
+                            <p id="profileStartDate">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subscription-card">
+                    <h3><i class="fas fa-chart-line"></i> Subscription Stats</h3>
+                    <div class="stats-list">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Meals</span>
+                            <span class="stat-value" id="totalMeals">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Active Days</span>
+                            <span class="stat-value" id="activeDays">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Spent</span>
+                            <span class="stat-value">₹<span id="totalSpent">0</span></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Average/Day</span>
+                            <span class="stat-value">₹<span id="avgPerDay">0</span></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
+
+    <!-- Modals -->
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <span class="close" onclick="closeEditProfile()">&times;</span>
+            </div>
+            <form id="profileForm" class="form-grid">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" name="fullName" id="editFullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Father's Name</label>
+                    <input type="text" name="fatherName" id="editFatherName">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" name="phone" id="editPhone" pattern="[0-9]{10}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" name="email" id="editEmail" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Delivery Address *</label>
+                    <textarea name="address" id="editAddress" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Photo/ID</label>
+                    <input type="file" name="photo" accept="image/*">
+                </div>
+
+                <div class="form-actions full-width">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditProfile()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Date Picker Modal -->
+    <div id="customDateModal" class="modal">
+        <div class="modal-content compact">
+            <div class="modal-header">
+                <h3>Select Date Range</h3>
+                <span class="close" onclick="closeCustomDate()">&times;</span>
+            </div>
+            <div class="date-picker-content">
+                <div class="form-group">
+                    <label>From Date</label>
+                    <input type="date" id="mealOffFrom" min="">
+                </div>
+                <div class="form-group">
+                    <label>To Date</label>
+                    <input type="date" id="mealOffTo" min="">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeCustomDate()">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmCustomDate()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Notifications -->
+    <div id="notification" class="notification"></div>
+
     <script src="user-dashboard.js"></script>
 </body>
 

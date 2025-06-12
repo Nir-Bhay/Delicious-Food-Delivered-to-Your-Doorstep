@@ -4,32 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Kitchen - Delicious Food Delivered</title>
+    <title>Cloud Kitchen - Delicious Food Delivered to Your Doorstep</title>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Swiper CSS for Carousel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <i class="fas fa-utensils"></i>
+            <p>Preparing your experience...</p>
+        </div>
+    </div>
+
     <!-- Navigation Bar -->
-    <header>
+    <header id="navbar">
         <nav>
-            <div class="logo">
+            <div class="logo" data-aos="fade-right">
                 <a href="#">
-                    <img src="img/WhatsApp Image 2025-01-29 at 22.30.36_738ec0dd.png" alt="Cloud Kitchen Logo"
-                        height="50">
+                    <!-- <img src="img/WhatsApp Image 2025-01-29 at 22.30.36_738ec0dd.png" alt="Cloud Kitchen Logo"> -->
+                    <span class="logo-text">  जेवण</span>
                 </a>
             </div>
-            <ul class="menu">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Menu</a></li>
-                <li><a href="#">Contact Us</a></li>
+            <ul class="menu" id="menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <!-- <li><a href="#about" class="nav-link">About</a></li> -->
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#menu" class="nav-link">Menu</a></li>
+                <li><a href="#pricing" class="nav-link">Pricing</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="auth">
-                <a href="#" class="cta">Order Now</a>
-                <!-- <a href="#" class="sign-in">Sign In</a> -->
-                <a href="signup.html" class="sign-up">Sign Up</a>
+                <a href="#" class="btn-order-now">
+                    <i class="fas fa-shopping-cart"></i>
+                    Order Now
+                </a>
+                <a href="signup.html" class="btn-signup">
+                    <i class="fas fa-user-plus"></i>
+                    Sign Up
+                </a>
             </div>
-            <div class="hamburger">
+            <div class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -37,193 +68,591 @@
         </nav>
     </header>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#home" class="mobile-link">Home</a></li>
+            <li><a href="#about" class="mobile-link">About</a></li>
+            <li><a href="#features" class="mobile-link">Features</a></li>
+            <li><a href="#menu" class="mobile-link">Menu</a></li>
+            <li><a href="#pricing" class="mobile-link">Pricing</a></li>
+            <li><a href="#contact" class="mobile-link">Contact</a></li>
+        </ul>
+        <div class="mobile-auth">
+            <a href="#" class="btn-order-now-mobile">Order Now</a>
+            <a href="signup.html" class="btn-signup-mobile">Sign Up</a>
+        </div>
+    </div>
 
     <!-- Hero Section -->
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Delicious Food Delivered to Your Doorstep</h1>
-            <p>Fresh, tasty meals cooked and delivered with care.</p>
-            <a href="#" class="cta">Order Now</a>
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="hero-shape-1"></div>
+            <div class="hero-shape-2"></div>
         </div>
-        <div class="hero-image">
-            <img src="img/hero.png"
-                alt="Delicious Food">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                <h1 class="hero-title">
+                    Delicious Food <span class="highlight">Delivered</span> to Your Doorstep
+                </h1>
+                <p class="hero-subtitle">
+                    Experience the perfect blend of taste and convenience with our fresh,
+                    chef-crafted meals delivered hot and ready to enjoy.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn-primary">
+                        <i class="fas fa-utensils"></i>
+                        Explore Menu
+                    </a>
+                    <a href="#" class="btn-secondary">
+                        <i class="fas fa-play-circle"></i>
+                        How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <h3>5000+</h3>
+                        <p>Happy Customers</p>
+                    </div>
+                    <div class="stat">
+                        <h3>4.8★</h3>
+                        <p>Average Rating</p>
+                    </div>
+                    <div class="stat">
+                        <h3>30min</h3>
+                        <p>Avg Delivery</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image" data-aos="fade-left" data-aos-duration="1000">
+                <img src="img/hero.png" alt="Delicious Food">
+                <div class="floating-badge">
+                    <i class="fas fa-fire"></i>
+                    Hot & Fresh
+                </div>
+            </div>
         </div>
     </section>
-
 
     <!-- Features Section -->
-    <section class="features">
-        <h2>Why Choose Us?</h2>
-        <p class="feature-subtext">Experience the best with our premium service, fresh ingredients, and lightning-fast
-            delivery.</p>
-        <div class="feature-list">
-            <div class="feature-item">
-                <img src="https://via.placeholder.com/70" alt="Fast Delivery">
-                <h3>Ultra-Fast Delivery</h3>
-                <p>Get your food delivered in under 30 minutes with real-time tracking.</p>
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">Why Choose Us</span>
+                <h2 class="section-title">Experience Excellence in Every Bite</h2>
+                <p class="section-subtitle">
+                    We're committed to delivering not just food, but an exceptional dining experience
+                </p>
             </div>
-            <div class="feature-item">
-                <img src="https://via.placeholder.com/70" alt="Fresh Ingredients">
-                <h3>Farm-Fresh Ingredients</h3>
-                <p>Only the freshest and highest-quality ingredients go into our meals.</p>
-            </div>
-            <div class="feature-item">
-                <img src="https://via.placeholder.com/70" alt="24/7 Service">
-                <h3>24/7 Availability</h3>
-                <p>Order anytime, anywhere – we are always open for you!</p>
-            </div>
-            <div class="feature-item">
-                <img src="https://via.placeholder.com/70" alt="Affordable Pricing">
-                <h3>Affordable Prices</h3>
-                <p>Enjoy delicious meals at pocket-friendly prices with no hidden charges.</p>
-            </div>
-            <div class="feature-item">
-                <img src="https://via.placeholder.com/70" alt="Eco-Friendly Packaging">
-                <h3>Eco-Friendly Packaging</h3>
-                <p>We use biodegradable packaging to reduce environmental impact.</p>
+
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Lightning Fast Delivery</h3>
+                    <p>Get your food delivered in under 30 minutes with real-time GPS tracking</p>
+                    <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Farm Fresh Ingredients</h3>
+                    <p>Only the freshest locally-sourced ingredients make it to your plate</p>
+                    <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>24/7 Service</h3>
+                    <p>Craving midnight snacks? We're always here to serve you</p>
+                    <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <h3>Best Prices</h3>
+                    <p>Enjoy premium quality meals at unbeatable prices</p>
+                    <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h3>Eco-Friendly</h3>
+                    <p>100% biodegradable packaging for a sustainable future</p>
+                    <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Safe & Hygienic</h3>
+                    <p>Contactless delivery with highest safety standards</p>
+                    <a href="#" class="feature-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">Our Menu</span>
+                <h2 class="section-title">Winter Special Menu 2025</h2>
+                <p class="section-subtitle">
+                    Carefully curated dishes to warm your heart this winter
+                </p>
+            </div>
 
-    <section class="winter-menu">
-        <h2>Winter Menu 2025</h2>
+            <!-- Menu Tabs -->
+            <div class="menu-tabs" data-aos="fade-up">
+                <button class="menu-tab active" data-tab="breakfast">
+                    <i class="fas fa-coffee"></i> Breakfast
+                </button>
+                <button class="menu-tab" data-tab="lunch">
+                    <i class="fas fa-sun"></i> Lunch
+                </button>
+                <button class="menu-tab" data-tab="dinner">
+                    <i class="fas fa-moon"></i> Dinner
+                </button>
+            </div>
 
-        <div class="menu-section">
-            <h3>1st & 3rd Week - Breakfast</h3>
-            <ul>
-                <li>Sunday: Kachori + Sabji</li>
-                <li>Monday: Idli + Sambhar + Chutney</li>
-                <li>Wednesday: Roti + Bhujia</li>
-                <li>Sunday: Poha + Jalebi</li>
-                <li>Monday: Roti + Sabji</li>
-                <li>Tuesday: Puri + Chola</li>
-                <li>Wednesday: Uttapam + Chutney</li>
-                <li>Friday: Kachori + Sabji</li>
-                <li>Saturday: Paratha + Bhujiya</li>
-            </ul>
-        </div>
+            <!-- Menu Content -->
+            <div class="menu-content">
+                <!-- Breakfast Menu -->
+                <div class="menu-category active" id="breakfast">
+                    <div class="menu-grid">
+                        <div class="menu-item" data-aos="fade-up">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Kachori">
+                                <span class="menu-badge">Popular</span>
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Sunday Special</h4>
+                                <p>Kachori + Sabji</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹40</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="menu-section">
-            <h3>1st & 3rd Week - Lunch</h3>
-            <ul>
-                <li>Paneer + Raita + Butter Roti + Rice + Yellow Dal Fry + Seasonal Veg. + Chokha</li>
-                <li>Jeera Rice + Chola/Rajma/Tadka + Bhujia + Salad + Fryums</li>
-                <li>Veg Biryani + Raita + Salad</li>
-                <li>Masala Khichdi + Chokha + Dahi + Fryums + Aachar/Chutney</li>
-            </ul>
-        </div>
+                        <div class="menu-item" data-aos="fade-up" data-aos-delay="100">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Idli">
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>South Indian Delight</h4>
+                                <p>Idli + Sambhar + Chutney</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹35</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="menu-section">
-            <h3>2nd & 4th Week - Lunch</h3>
-            <ul>
-                <li>Jeera Rice + Sabji + Tadka + Fryums/Aachar</li>
-                <li>Veg Pulao + Dum Aloo + Aachar/Chutney</li>
-                <li>Rice + Chola/Rajma/Tadka + Bhujia + Salad</li>
-                <li>Masala Khichdi + Chokha + Dahi + Fryums/Aachar/Chutney</li>
-            </ul>
-        </div>
+                        <div class="menu-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Poha">
+                                <span class="menu-badge new">New</span>
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Traditional Combo</h4>
+                                <p>Poha + Jalebi</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹45</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="menu-section">
-            <h3>Dinner</h3>
-            <ul>
-                <li>Stuffed Paratha + Tomato Chutney + Dhaniya Chutney</li>
-                <li>Butter Roti + Seasonal Veg. + Bhujiya + Fryums/Aachar</li>
-                <li>Kashmiri Dum Aloo + Fryums</li>
-                <li>Poori + Sabji</li>
-                <li>Paneer Sabji + Butter Roti + Fryums/Aachar/Chutney</li>
-                <li>Makhani Mix Tadka + Chana Dal Tadka + Bhujia + Butter Roti</li>
-            </ul>
+                <!-- Lunch Menu -->
+                <div class="menu-category" id="lunch">
+                    <div class="menu-grid">
+                        <div class="menu-item" data-aos="fade-up">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Thali">
+                                <span class="menu-badge">Chef's Special</span>
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Premium Thali</h4>
+                                <p>Paneer + Raita + Butter Roti + Rice + Dal + Veg</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹110</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-item" data-aos="fade-up" data-aos-delay="100">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Biryani">
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Veg Biryani</h4>
+                                <p>Aromatic Biryani + Raita + Salad</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹90</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Khichdi">
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Comfort Food</h4>
+                                <p>Masala Khichdi + Chokha + Dahi + Fryums</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹70</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dinner Menu -->
+                <div class="menu-category" id="dinner">
+                    <div class="menu-grid">
+                        <div class="menu-item" data-aos="fade-up">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Paratha">
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Stuffed Delight</h4>
+                                <p>Stuffed Paratha + Chutneys</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹55</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-item" data-aos="fade-up" data-aos-delay="100">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Paneer">
+                                <span class="menu-badge">Bestseller</span>
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Paneer Special</h4>
+                                <p>Paneer Sabji + Butter Roti + Accompaniments</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹80</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="menu-item-image">
+                                <img src="https://via.placeholder.com/300x200" alt="Dum Aloo">
+                            </div>
+                            <div class="menu-item-content">
+                                <h4>Kashmiri Special</h4>
+                                <p>Kashmiri Dum Aloo + Roti + Fryums</p>
+                                <div class="menu-item-footer">
+                                    <span class="price">₹75</span>
+                                    <button class="btn-add-cart">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
-    <!-- Testimonials -->
-    <section class="subscription-model">
-        <h2>Subscription Plans</h2>
-        <table class="subscription-table">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Time</th>
-                    <th>Per Meal (Rs.)</th>
-                    <th>Per Day (Rs.)</th>
-                    <th>Monthly (Rs.)</th>
-                    <th>Security (Rs.)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td rowspan="2">Premium</td>
-                    <td>Per Meal</td>
-                    <td>110</td>
-                    <td>100</td>
-                    <td>3300</td>
-                    <td>500</td>
-                </tr>
-                <tr>
-                    <td>Demo</td>
-                    <td>110</td>
-                    <td>70</td>
-                    <td>70</td>
-                    <td>70</td>
-                </tr>
-                <tr>
-                    <td rowspan="4">Executive (Full)</td>
-                    <td>Per Meal</td>
-                    <td>50</td>
-                    <td>55</td>
-                    <td>3000</td>
-                    <td>500</td>
-                </tr>
-                <tr>
-                    <td>Per Day</td>
-                    <td>90</td>
-                    <td>50</td>
-                    <td>2700</td>
-                    <td>500</td>
-                </tr>
-                <tr>
-                    <td>Demo</td>
-                    <td>70</td>
-                    <td>70</td>
-                    <td>70</td>
-                    <td>70</td>
-                </tr>
-                <tr>
-                    <td>Breakfast</td>
-                    <td colspan="4">40 Per Meal (1200 Monthly)</td>
-                </tr>
-            </tbody>
-        </table>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">Subscription Plans</span>
+                <h2 class="section-title">Choose Your Perfect Plan</h2>
+                <p class="section-subtitle">
+                    Flexible subscription options to suit your lifestyle
+                </p>
+            </div>
+
+            <div class="pricing-cards">
+                <!-- Premium Plan -->
+                <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <i class="fas fa-crown"></i>
+                        <h3>Premium</h3>
+                        <p>For the food connoisseur</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="currency">₹</span>
+                        <span class="amount">3300</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> All meals included</li>
+                        <li><i class="fas fa-check"></i> Premium ingredients</li>
+                        <li><i class="fas fa-check"></i> Free delivery</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                        <li><i class="fas fa-check"></i> Special weekend menu</li>
+                    </ul>
+                    <button class="btn-pricing">Choose Premium</button>
+                </div>
+
+                <!-- Executive Plan -->
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="pricing-header">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>Executive</h3>
+                        <p>Perfect for professionals</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="currency">₹</span>
+                        <span class="amount">2700</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Lunch & Dinner</li>
+                        <li><i class="fas fa-check"></i> Quality meals</li>
+                        <li><i class="fas fa-check"></i> Free delivery</li>
+                        <li><i class="fas fa-check"></i> Flexible timing</li>
+                        <li><i class="fas fa-check"></i> Monthly billing</li>
+                    </ul>
+                    <button class="btn-pricing">Choose Executive</button>
+                </div>
+
+                <!-- Basic Plan -->
+                <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="pricing-header">
+                        <i class="fas fa-utensils"></i>
+                        <h3>Basic</h3>
+                        <p>Great for starters</p>
+                    </div>
+                    <div class="pricing-price">
+                        <span class="currency">₹</span>
+                        <span class="amount">1200</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Breakfast only</li>
+                        <li><i class="fas fa-check"></i> Fresh daily meals</li>
+                        <li><i class="fas fa-check"></i> Standard delivery</li>
+                        <li><i class="fas fa-check"></i> Email support</li>
+                        <li><i class="fas fa-check"></i> Pay as you go</li>
+                    </ul>
+                    <button class="btn-pricing">Choose Basic</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag">Testimonials</span>
+                <h2 class="section-title">What Our Customers Say</h2>
+                <p class="section-subtitle">
+                    Real stories from real food lovers
+                </p>
+            </div>
+
+            <div class="swiper testimonials-slider" data-aos="fade-up">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"The food quality is exceptional! Fresh ingredients and amazing taste. Highly recommend!"
+                            </p>
+                            <div class="testimonial-author">
+                                <img src="https://via.placeholder.com/60" alt="Customer">
+                                <div>
+                                    <h4>Priya Sharma</h4>
+                                    <span>Food Blogger</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"Best food delivery service! Always on time and the packaging is eco-friendly too."</p>
+                            <div class="testimonial-author">
+                                <img src="https://via.placeholder.com/60" alt="Customer">
+                                <div>
+                                    <h4>Rahul Verma</h4>
+                                    <span>IT Professional</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"Love the variety in the menu! Something new every week. Great value for money."</p>
+                            <div class="testimonial-author">
+                                <img src="https://via.placeholder.com/60" alt="Customer">
+                                <div>
+                                    <h4>Anita Patel</h4>
+                                    <span>Teacher</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2>Ready to Order Your First Meal?</h2>
+                <p>Join thousands of happy customers enjoying delicious, healthy meals every day</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Order Now
+                    </a>
+                    <a href="#" class="btn-secondary">
+                        <i class="fas fa-phone"></i>
+                        Call Us
+                    </a>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="social-media">
-                <h3>Follow Us</h3>
-                <a href="#" class="social-icon">Facebook</a>
-                <a href="#" class="social-icon">Instagram</a>
-                <a href="#" class="social-icon">Twitter</a>
-                <a href="#" class="social-icon">LinkedIn</a>
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-column" data-aos="fade-up">
+                        <div class="footer-logo">
+                            <!-- <img src="img/WhatsApp Image 2025-01-29 at 22.30.36_738ec0dd.png" alt="Cloud Kitchen"> -->
+                            <h3>जेवण</h3>
+                        </div>
+                        <p>Delivering happiness, one meal at a time. Fresh, delicious, and always on time.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="footer-column" data-aos="fade-up" data-aos-delay="100">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#menu">Our Menu</a></li>
+                            <li><a href="#pricing">Pricing Plans</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column" data-aos="fade-up" data-aos-delay="200">
+                        <h4>Customer Service</h4>
+                        <ul>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Track Order</a></li>
+                            <li><a href="#">Delivery Info</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">FAQs</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column" data-aos="fade-up" data-aos-delay="300">
+                        <h4>Contact Info</h4>
+                        <ul class="contact-list">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                123 Cloud Street, Kitchen City
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                +1 234 567 890
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                info@cloudkitchen.com
+                            </li>
+                            <li>
+                                <i class="fas fa-clock"></i>
+                                24/7 Service Available
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="quick-links">
-                <h3>Quick Links</h3>
-                <a href="#">About</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">FAQ</a>
-            </div>
-            <div class="contact-info">
-                <h3>Contact Us</h3>
-                <p>Email: info@cloudkitchen.com</p>
-                <p>Phone: +1 234 567 890</p>
-                <p>Address: 123 Cloud Street, Kitchen City</p>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 Cloud Kitchen. All rights reserved. Made with <i class="fas fa-heart"></i> for food
+                    lovers.
+                </p>
             </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 

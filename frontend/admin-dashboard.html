@@ -4,318 +4,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard - Meal Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin-dashboard.css">
-    <script>
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById(sectionId).style.display = 'block';
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            fetchAdminProfile();
-            fetchAllUserProfiles();
-
-            document.getElementById("userForm").addEventListener("submit", async (event) => {
-                event.preventDefault();
-                updateUserProfile();
-            });
-
-            document.getElementById("createUserForm").addEventListener("submit", async (event) => {
-                event.preventDefault();
-                createUser();
-            });
-        });
-
-        async function fetchAdminProfile() {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            const decoded = JSON.parse(atob(token.split('.')[1])); // Decode JWT token manually (for simplicity)
-            document.getElementById("adminName").innerText = decoded.name; // Admin's name
-            document.getElementById("adminEmail").innerText = decoded.email; // Admin's email
-        }
-
-        async function fetchAllUserProfiles() {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            try {
-                const response = await fetch("https://my-backend-cedd.onrender.com/admin/profiles", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": token
-                    },
-                });
-                const data = await response.json();
-
-                if (response.ok) {
-                    const userTable = document.getElementById("userTable");
-                    userTable.innerHTML = ""; // Clear existing rows
-
-                    data.forEach(user => {
-                        const row = userTable.insertRow();
-                        row.insertCell(0).innerText = user.fullName;
-                        row.insertCell(1).innerText = user.email;
-                        row.insertCell(2).innerText = user.phone;
-                        row.insertCell(3).innerText = user.address;
-                        row.insertCell(4).innerText = user.mealType;
-                        row.insertCell(5).innerText = user.startDate;
-
-                        const updateCell = row.insertCell(6);
-                        const updateButton = document.createElement("button");
-                        updateButton.innerText = "Update";
-                        updateButton.onclick = () => showUpdateForm(user);
-                        updateCell.appendChild(updateButton);
-
-                        const deleteCell = row.insertCell(7);
-                        const deleteButton = document.createElement("button");
-                        deleteButton.innerText = "Delete";
-                        deleteButton.onclick = () => deleteUserProfile(user._id);
-                        deleteCell.appendChild(deleteButton);
-                    });
-                } else {
-                    console.error("Failed to fetch user profiles:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching user profiles:", error);
-            }
-        }
-
-        function showUpdateForm(user) {
-            document.getElementById("userId").value = user._id;
-            document.getElementById("fullName").value = user.fullName;
-            document.getElementById("fatherName").value = user.fatherName;
-            document.getElementById("phone").value = user.phone;
-            document.getElementById("email").value = user.email;
-            document.getElementById("address").value = user.address;
-            document.getElementById("mealType").value = user.mealType;
-            document.getElementById("startDate").value = user.startDate;
-            document.getElementById("userFormSection").style.display = "block";
-        }
-
-        async function updateUserProfile() {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            const userId = document.getElementById("userId").value;
-            const formData = new FormData(document.getElementById("userForm"));
-
-            try {
-                const response = await fetch(`https://my-backend-cedd.onrender.com/admin/profile/${userId}`, {
-                    method: "PUT",
-                    headers: {
-                        "Authorization": token
-                    },
-                    body: formData,
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    alert("Profile updated successfully!");
-                    fetchAllUserProfiles();
-                    document.getElementById("userFormSection").style.display = "none";
-                } else {
-                    alert("Error updating profile: " + result.message);
-                }
-            } catch (error) {
-                console.error("Error updating profile:", error);
-            }
-        }
-
-        async function deleteUserProfile(userId) {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            if (!confirm("Are you sure you want to delete this profile?")) return;
-
-            try {
-                const response = await fetch(`https://my-backend-cedd.onrender.com/admin/profile/${userId}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Authorization": token
-                    },
-                });
-
-                if (response.ok) {
-                    alert("Profile deleted successfully!");
-                    fetchAllUserProfiles();
-                } else {
-                    alert("Error deleting profile");
-                }
-            } catch (error) {
-                console.error("Error deleting profile:", error);
-            }
-        }
-
-        async function createUser() {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                window.location.href = "login.html"; // If token is not found, redirect to login
-                return;
-            }
-
-            const formData = new FormData(document.getElementById("createUserForm"));
-
-            // Ensure the form data includes the required fields
-            const fullName = formData.get("fullName");
-            const email = formData.get("email");
-            const phone = formData.get("phone");
-            const password = email || phone; // Use email or phone as password
-
-            if (!fullName || !email || !phone) {
-                alert("Please fill in all required fields.");
-                return;
-            }
-
-            formData.append("password", password); // Add password to form data
-
-            try {
-                const response = await fetch("https://my-backend-cedd.onrender.com/admin/create-user", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": token
-                    },
-                    body: formData,
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    alert("User created successfully!");
-                    fetchAllUserProfiles();
-                    document.getElementById("createUserForm").reset();
-                } else {
-                    alert("Error creating user: " + result.error);
-                }
-            } catch (error) {
-                console.error("Error creating user:", error);
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("token"); // Remove token on logout
-            window.location.href = "login.html"; // Redirect to login page
-        }
-    </script>
 </head>
 
 <body>
-    <div class="sidebar">
-        <h2>Admin Dashboard</h2>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-utensils"></i>
+            <h2>Meal Admin</h2>
+        </div>
         <nav>
             <ul>
-                <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-                <li><a href="#" onclick="showSection('usermanagement')">User Management</a></li>
-                <li><a href="#" onclick="showSection('mealmanagement')">Meal Management</a></li>
-                <li><a onclick="logout()">Logout</a></li>
+                <li><a href="#" onclick="showSection('dashboard')" class="nav-link active"><i
+                            class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" onclick="showSection('usermanagement')" class="nav-link"><i class="fas fa-users"></i>
+                        User Management</a></li>
+                <li><a href="#" onclick="showSection('mealmanagement')" class="nav-link"><i
+                            class="fas fa-pizza-slice"></i> Meal Management</a></li>
+                <li><a href="#" onclick="showSection('reports')" class="nav-link"><i class="fas fa-chart-bar"></i>
+                        Reports</a></li>
+                <li><a href="#" onclick="showSection('settings')" class="nav-link"><i class="fas fa-cog"></i>
+                        Settings</a></li>
+                <li><a href="#" onclick="logout()" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </nav>
     </div>
-    <div class="main-content">
-        <header>
-            <h1>Welcome, <span id="adminName"></span>!</h1>
-            <p id="adminEmail"></p>
-        </header>
 
-        <section id="dashboard" class="content-section">
-            <h2>Dashboard</h2>
-            <p>Welcome to your dashboard.</p>
-            <div>
-                <div class="totalusers"></div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="admin-info">
+                <span class="admin-name">Welcome, <span id="adminName">Admin</span></span>
+                <span class="admin-email" id="adminEmail">admin@example.com</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="section-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                <button class="btn btn-primary" onclick="refreshDashboard()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--primary-color);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Total Users</h3>
+                        <p class="stat-number" id="totalUsers">0</p>
+                        <span class="stat-change positive">+12% from last month</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--success-color);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Active Users</h3>
+                        <p class="stat-number" id="activeUsers">0</p>
+                        <span class="stat-change positive">+5% from last week</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--warning-color);">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Today's Meals</h3>
+                        <p class="stat-number" id="todaysMeals">0</p>
+                        <span class="stat-change">Updated hourly</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--danger-color);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Pending Actions</h3>
+                        <p class="stat-number" id="pendingActions">0</p>
+                        <span class="stat-change negative">Requires attention</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <div class="activity-list" id="activityList">
+                    <div class="activity-item">
+                        <i class="fas fa-user-plus"></i>
+                        <div class="activity-details">
+                            <p>New user registered: John Doe</p>
+                            <span>2 minutes ago</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="mealmanagement" class="content-section" style="display:none;">
-            <h2>Meal Management</h2>
-            <p>Manage your meal menu here.</p>
-        </section>
-
+        <!-- User Management Section -->
         <section id="usermanagement" class="content-section" style="display:none;">
-            <h2>User Management</h2>
-            <table id="userTable">
-                <tr>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Meal Type</th>
-                    <th>Start Date</th>
-                    <th>Update</th>
-                    <th>Delete</th>
-                </tr>
-            </table>
-            <h2>Create New User</h2>
-            <form id="createUserForm">
-                <label>Full Name:</label>
-                <input type="text" id="newFullName" name="fullName" required>
-                <label>Father's Name:</label>
-                <input type="text" id="newFatherName" name="fatherName">
-                <label>Phone:</label>
-                <input type="tel" id="newPhone" name="phone" required>
-                <label>Email:</label>
-                <input type="email" id="newEmail" name="email" required>
-                <label>Address:</label>
-                <input type="text" id="newAddress" name="address">
-                <label>Meal Type:</label>
-                <select id="newMealType" name="mealType">
-                    <option>Premium</option>
-                    <option>Executive</option>
-                    <option>Half Executive</option>
-                    <option>Regular</option>
-                </select>
-                <label>Start Date:</label>
-                <input type="date" id="newStartDate" name="startDate">
-                <label>Upload Photo/Aadhar Card:</label>
-                <input type="file" id="newPhoto" name="photo">
-                <button type="submit">Create User</button>
-            </form>
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> User Management</h2>
+                <div class="header-actions">
+                    <input type="text" class="search-input" placeholder="Search users..."
+                        onkeyup="searchUsers(this.value)">
+                    <button class="btn btn-primary" onclick="showCreateUserForm()">
+                        <i class="fas fa-plus"></i> Add New User
+                    </button>
+                </div>
+            </div>
 
+            <!-- User Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Meal Type</th>
+                            <th>Status</th>
+                            <th>Start Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTable">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- User Form Modal -->
+            <div id="userModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalTitle">Add New User</h3>
+                        <span class="close" onclick="closeUserModal()">&times;</span>
+                    </div>
+                    <form id="userForm" class="form-grid">
+                        <input type="hidden" id="userId" name="userId">
+
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Father's Name</label>
+                            <input type="text" id="fatherName" name="fatherName">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Address</label>
+                            <textarea id="address" name="address" rows="2"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Meal Type</label>
+                            <select id="mealType" name="mealType">
+                                <option value="Premium">Premium</option>
+                                <option value="Executive">Executive</option>
+                                <option value="Half Executive">Half Executive</option>
+                                <option value="Regular">Regular</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" id="startDate" name="startDate">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Upload Photo/Document</label>
+                            <input type="file" id="photo" name="photo" accept="image/*">
+                        </div>
+
+                        <div class="form-actions full-width">
+                            <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </section>
 
-        <section id="userFormSection" style="display:none;">
-            <h2>Update User Profile</h2>
-            <form id="userForm">
-                <input type="hidden" id="userId" name="userId">
-                <label>Full Name:</label>
-                <input type="text" id="fullName" name="fullName" required>
-                <label>Father's Name:</label>
-                <input type="text" id="fatherName" name="fatherName" required>
-                <label>Phone:</label>
-                <input type="tel" id="phone" name="phone" required>
-                <label>Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label>Address:</label>
-                <input type="text" id="address" name="address" required>
-                <label>Meal Type:</label>
-                <select id="mealType" name="mealType">
-                    <option>Premium</option>
-                    <option>Executive</option>
-                    <option>Half Executive</option>
-                    <option>Regular</option>
-                </select>
-                <label>Start Date:</label>
-                <input type="date" id="startDate" name="startDate" required>
-                <label>Upload Photo/Aadhar Card:</label>
-                <input type="file" id="photo" name="photo">
-                <button type="submit">Update Profile</button>
-            </form>
+        <!-- Meal Management Section -->
+        <section id="mealmanagement" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-pizza-slice"></i> Meal Management</h2>
+                <button class="btn btn-primary" onclick="showAddMealForm()">
+                    <i class="fas fa-plus"></i> Add Meal Plan
+                </button>
+            </div>
+
+            <div class="meal-plans-grid">
+                <div class="meal-card">
+                    <div class="meal-header premium">
+                        <h3>Premium</h3>
+                        <span class="price">₹150/day</span>
+                    </div>
+                    <div class="meal-body">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 4 Chapati</li>
+                            <li><i class="fas fa-check"></i> Rice</li>
+                            <li><i class="fas fa-check"></i> Dal</li>
+                            <li><i class="fas fa-check"></i> 2 Vegetables</li>
+                            <li><i class="fas fa-check"></i> Salad</li>
+                            <li><i class="fas fa-check"></i> Sweet Dish</li>
+                        </ul>
+                        <div class="meal-actions">
+                            <button class="btn btn-sm btn-secondary">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="meal-card">
+                    <div class="meal-header executive">
+                        <h3>Executive</h3>
+                        <span class="price">₹120/day</span>
+                    </div>
+                    <div class="meal-body">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 3 Chapati</li>
+                            <li><i class="fas fa-check"></i> Rice</li>
+                            <li><i class="fas fa-check"></i> Dal</li>
+                            <li><i class="fas fa-check"></i> 1 Vegetable</li>
+                            <li><i class="fas fa-check"></i> Salad</li>
+                        </ul>
+                        <div class="meal-actions">
+                            <button class="btn btn-sm btn-secondary">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="meal-card">
+                    <div class="meal-header regular">
+                        <h3>Regular</h3>
+                        <span class="price">₹80/day</span>
+                    </div>
+                    <div class="meal-body">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 2 Chapati</li>
+                            <li><i class="fas fa-check"></i> Rice</li>
+                            <li><i class="fas fa-check"></i> Dal</li>
+                            <li><i class="fas fa-check"></i> 1 Vegetable</li>
+                        </ul>
+                        <div class="meal-actions">
+                            <button class="btn btn-sm btn-secondary">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> Reports</h2>
+                <div class="header-actions">
+                    <select class="filter-select">
+                        <option>Last 7 days</option>
+                        <option>Last 30 days</option>
+                        <option>Last 3 months</option>
+                    </select>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <div class="report-cards">
+                <div class="report-card">
+                    <h3>User Growth</h3>
+                    <canvas id="userGrowthChart"></canvas>
+                </div>
+                <div class="report-card">
+                    <h3>Meal Distribution</h3>
+                    <canvas id="mealDistChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="content-section" style="display:none;">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>Profile Settings</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Admin Name</label>
+                            <input type="text" value="Admin User">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" value="admin@example.com">
+                        </div>
+                        <button class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+
+                <div class="settings-card">
+                    <h3>System Settings</h3>
+                    <div class="setting-item">
+                        <label>Email Notifications</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>Auto Backup</label>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
+
+    <script src="admin-dashboard.js"></script>
 </body>
 
 </html>
